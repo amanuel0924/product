@@ -23,6 +23,19 @@ export const protect = asyncHandler(async (req, res, next) => {
   }
 
   if (!token) {
-    throw new Error("you are not loged in, please log in first")
+    res.status(401).json({
+      status: "fail",
+      message: "you are not loged in, please log in first",
+    })
+  }
+})
+
+export const adminValidator = asyncHandler(async (req, res, next) => {
+  if (req.user.role === "admin") {
+    next()
+  } else {
+    res.status(403).json({
+      error: "this route only for admin",
+    })
   }
 })

@@ -63,7 +63,5 @@ export const logInUser = asyncHandler(async (req, res, next) => {
   }
 })
 export const getMyProfile = (req, res, next) => {
-  res.status(200).json({
-    message: "your profile",
-  })
+  res.status(200).json(req.user)
 }

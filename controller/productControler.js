@@ -44,39 +44,35 @@ export const createproduct = async (req, res, next) => {
   }
 }
 export const deleteproduct = async (req, res, next) => {
-  try {
-    console.log(req.user)
-    const product = await Product.findById(req.params.id)
+  console.log(req.user)
+  const product = await Product.findById(req.params.id)
 
-    if (!product) {
-      res.status(400).json({
-        error: "product not found",
-      })
-    }
-    const user = await User.findById(req.user.id)
-
-    if (!user) {
-      res.status(400).json({
-        error: "user not found",
-      })
-    }
-    if (user.id !== product.owner.toString()) {
-      res.status(400).json({
-        error: "you have no permition",
-      })
-    }
-    await Product.findByIdAndDelete(req.params.id)
-
-    res.status(200).json({
-      status: "success",
-      message: "data deleted successfully",
+  if (!product) {
+    res.status(400).json({
+      error: "product not found",
     })
-  } catch (err) {
-    res.status(404).json({
-      status: "fail",
-      message: err,
-    })
+    return
   }
+  const user = await User.findById(req.user.id)
+
+  if (!user) {
+    res.status(400).json({
+      error: "user not found",
+    })
+    return
+  }
+  if (user.id !== product.owner.toString()) {
+    res.status(400).json({
+      error: "you have no permition",
+    })
+    return
+  }
+  await Product.findByIdAndDelete(req.params.id)
+
+  res.status(200).json({
+    status: "success",
+    message: "data deleted successfully",
+  })
 }
 export const updateproduct = async (req, res, next) => {
   const product = await Product.findById(req.params.id)

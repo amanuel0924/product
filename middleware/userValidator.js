@@ -8,8 +8,10 @@ export const userValid = (req, res, next) => {
       .string()
       .min(8)
       .max(30)
-      .regex(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,30}$/
+      .pattern(
+        new RegExp(
+          "^(?=.*[a-z])(?=.*[A-Z])(?=.*d)(?=.*[@$!%*?&])[A-Za-zd@$!%*?&]{8,30}$"
+        )
       )
       .required(),
     role: joi.string().required(),
@@ -17,7 +19,7 @@ export const userValid = (req, res, next) => {
   const { err } = Schema.validate(req.body, { abortEarly: false })
   if (err) {
     return res.status(400).json({
-      message: err,
+      message: err.details.map((detail) => detail.message),
     })
   }
   next()
